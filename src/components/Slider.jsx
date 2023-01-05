@@ -1,6 +1,7 @@
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@mui/icons-material";
 import React, { useState } from "react";
 import styled from "styled-components";
+import { SliderItems } from "../data";
 
 const Container = styled.div`
   width: 100%;
@@ -25,16 +26,20 @@ const Arrow = styled.div`
   margin: auto;
   cursor: pointer;
   opacity: 0.5;
+  z-index: 2;
 `;
 const Wrapper = styled.div`
   height: 100%;
+  display: flex;
+  transition: all 1.5s ease;
+  transform: translate(${(props) => props.slideIndex * -100}vw);
 `;
 const Slide = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
   align-items: center;
-  background-color: #${props=>props.bg};
+  background-color: #${(props) => props.bg};
 `;
 const ImageContainer = styled.div`
   height: 100vh;
@@ -48,70 +53,55 @@ const InfoContainer = styled.div`
   padding: 50px;
 `;
 const Title = styled.h1`
-    font-size: 70px;
-`
+  font-size: 70px;
+`;
 const Desc = styled.p`
-    margin: 50px 0px;
-    font-size: 20px;
-    font-weight: 500;
-    letter-spacing: 3px;
-`
+  margin: 50px 0px;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 3px;
+`;
 const Button = styled.button`
-    padding: 10px;
-    font-size: 20px;
-    background-color: transparent;
-    cursor: pointer;
-`
+  padding: 10px;
+  font-size: 20px;
+  background-color: transparent;
+  cursor: pointer;
+`;
 
 function Slider() {
+  const [slideIndex, setslideIndex] = useState("");
 
-    const [slideIndex, setslideIndex] = useState("");
-    const handleClick = (direction)=>{
-
+  const handleClick = (direction) => {
+    if (direction === "left") {
+      setslideIndex(slideIndex > 0 ? slideIndex - 1 : 2);
+    } else {
+      setslideIndex(slideIndex < 2 ? slideIndex + 1 : 0);
     }
+  };
 
   return (
     <>
       <Container>
-        <Arrow direction="left" onClick={()=>handleClick("left")}>
-          <ArrowLeftOutlined></ArrowLeftOutlined>
-        </Arrow>
-        <Arrow direction="right" onClick={()=>handleClick("right")}>
+        <Arrow direction="right" onClick={() => handleClick("right")}>
           <ArrowRightOutlined></ArrowRightOutlined>
         </Arrow>
-
-        <Wrapper>
-          <Slide bg = "f5fafd">
-            <ImageContainer>
-              <Image src="https://images.pexels.com/photos/6626999/pexels-photo-6626999.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=1" />
-            </ImageContainer>
-            <InfoContainer>
-                <Title>WINTER SALE</Title>
-                <Desc>DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS</Desc>
+        <Wrapper slideIndex={slideIndex}>
+          {SliderItems.map((item) => (
+            <Slide bg={item.bg} key={item.id}>
+              <ImageContainer>
+                <Image src={item.img} />
+              </ImageContainer>
+              <InfoContainer>
+                <Title>{item.title}</Title>
+                <Desc>{item.desc}</Desc>
                 <Button>Buy Now</Button>
-            </InfoContainer>
-          </Slide>
-          <Slide bg = "f5fafd">
-            <ImageContainer>
-              <Image src="https://images.pexels.com/photos/6626999/pexels-photo-6626999.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=1" />
-            </ImageContainer>
-            <InfoContainer>
-                <Title>Flash SALE</Title>
-                <Desc>DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS</Desc>
-                <Button>Buy Now</Button>
-            </InfoContainer>
-          </Slide>
-          <Slide bg = "f5fafd">
-            <ImageContainer>
-              <Image src="https://images.pexels.com/photos/6626999/pexels-photo-6626999.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=1" />
-            </ImageContainer>
-            <InfoContainer>
-                <Title>New Year SALE</Title>
-                <Desc>DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS</Desc>
-                <Button>Buy Now</Button>
-            </InfoContainer>
-          </Slide>
+              </InfoContainer>
+            </Slide>
+          ))}
         </Wrapper>
+        <Arrow direction="left" onClick={() => handleClick("left")}>
+          <ArrowLeftOutlined />
+        </Arrow>
       </Container>
     </>
   );
