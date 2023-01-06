@@ -5,7 +5,7 @@ import { SliderItems } from "../data";
 
 const Container = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 85vh;
   display: flex;
   overflow: hidden;
 `;
